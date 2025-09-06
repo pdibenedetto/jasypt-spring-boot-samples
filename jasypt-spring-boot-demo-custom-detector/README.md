@@ -39,4 +39,14 @@ This app also showcases early initialization property encryption with a custom `
                 .sources(CustomDetectorDemoApplication.class).run(args);
 ```
 
+## Run
+
+```bash
+JASYPT_ENCRYPTOR_PASSWORD=password mvn spring-boot:run
+```
+or
+```bash
+mvn clean install && JASYPT_ENCRYPTOR_PASSWORD=password java -jar target/jasypt-spring-boot-demo-custom-detector-0.1-SNAPSHOT.jar
+```
+
 **This is not required in most scenarios**

@@ -14,7 +14,6 @@
 
 	<properties>
 		<start-class>demo.SimpleEmbeddedConfigServerAsymmetricDemoApplication</start-class>
-		<java.version>1.8</java.version>
 	</properties>
 
 	<build>
@@ -32,6 +31,10 @@
 
 
 	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
@@ -62,8 +65,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.stefanbirkner</groupId>
-			<artifactId>system-rules</artifactId>
+			<groupId>org.junit-pioneer</groupId>
+			<artifactId>junit-pioneer</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

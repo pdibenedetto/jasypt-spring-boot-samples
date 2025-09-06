@@ -2,12 +2,14 @@ package demo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.BootstrapWith;
 
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = SimpleStarterDemoApplication.class)
 public class SimpleStarterDemoApplicationTest {
 
@@ -17,9 +19,6 @@ public class SimpleStarterDemoApplicationTest {
 	@Autowired
 	MyService service;
 
-	static {
-		System.setProperty("jasypt.encryptor.password", "password");
-	}
 
 	@Test
 	public void testEnvironmentProperties() {

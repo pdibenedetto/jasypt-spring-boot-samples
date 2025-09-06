@@ -3,14 +3,15 @@ package demo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 @SpringBootTest(classes = DemoApplication.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 public class DemoApplicationTest {
 
 	@Autowired
@@ -29,10 +30,7 @@ public class DemoApplicationTest {
 	@Qualifier("encryptorBean")
 	StringEncryptor encryptor;
 
-	@BeforeAll
-	public static void before() {
-		System.setProperty("jasypt.encryptor.password", "password");
-	}
+
 
 	@Test
 	public void testEnvironmentProperties() {
@@ -58,9 +56,9 @@ public class DemoApplicationTest {
         assertEquals("my configuration", itemConfig.getConfigurationName());
         assertEquals(2, itemConfig.getItems().size());
         assertEquals("item1", itemConfig.getItems().get(0).getName());
-        assertEquals(new Integer(1), itemConfig.getItems().get(0).getValue());
+        assertEquals(Integer.valueOf(1), itemConfig.getItems().get(0).getValue());
         assertEquals("item2", itemConfig.getItems().get(1).getName());
-        assertEquals(new Integer(2), itemConfig.getItems().get(1).getValue());
+        assertEquals(Integer.valueOf(2), itemConfig.getItems().get(1).getValue());
     }
 
 	@Test

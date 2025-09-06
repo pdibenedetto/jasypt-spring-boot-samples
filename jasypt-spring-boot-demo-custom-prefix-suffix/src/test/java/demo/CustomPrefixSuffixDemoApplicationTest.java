@@ -3,6 +3,7 @@ package demo;
 import com.ulisesbocchio.jasyptspringboot.detector.DefaultPropertyDetector;
 import com.ulisesbocchio.jasyptspringboot.environment.StandardEncryptableEnvironment;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootContextLoader;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @BootstrapWith(CustomPrefixSuffixDemoApplicationTest.EncryptableEnvironmentBootstrapper.class)
 @ContextConfiguration(classes = CustomPrefixSuffixDemoApplication.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest
 public class CustomPrefixSuffixDemoApplicationTest {
 
@@ -51,9 +53,6 @@ public class CustomPrefixSuffixDemoApplicationTest {
     @Autowired
     MyService service;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
     @Test
     public void testEnvironmentProperties() {

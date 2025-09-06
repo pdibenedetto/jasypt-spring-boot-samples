@@ -2,10 +2,12 @@ package demo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = CustomResolverBeanDemoApplication.class)
 public class CustomResolverBeanDemoApplicationTest {
 
@@ -15,9 +17,6 @@ public class CustomResolverBeanDemoApplicationTest {
 	@Autowired
 	MyService service;
 
-	static {
-		System.setProperty("jasypt.encryptor.password", "password");
-	}
 
 	@Test
 	public void testEnvironmentProperties() {

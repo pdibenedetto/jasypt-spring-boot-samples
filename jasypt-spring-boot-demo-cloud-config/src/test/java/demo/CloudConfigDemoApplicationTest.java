@@ -4,6 +4,7 @@ import com.ulisesbocchio.jasyptspringboot.EncryptablePropertySourceConverter;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest(classes = CloudConfigDemoApplication.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 public class CloudConfigDemoApplicationTest {
 
     @Autowired
@@ -28,10 +30,6 @@ public class CloudConfigDemoApplicationTest {
 
     @Autowired
     ApplicationContext applicationContext;
-
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
 
     @Test

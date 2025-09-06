@@ -7,7 +7,6 @@ itemconfig:
 
     - name: item2
       value: 2
-
 jasypt:
     encryptor:
         bean: encryptorBean
@@ -15,3 +14,6 @@ jasypt:
 
 logging.level:
   org.springframework.context.annotation.ConfigurationClassPostProcessor: off
+spring:
+  application:
+    name: jasypt-spring-boot-demo

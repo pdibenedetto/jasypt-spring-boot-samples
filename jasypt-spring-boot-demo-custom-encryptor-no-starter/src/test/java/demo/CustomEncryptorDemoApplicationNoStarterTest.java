@@ -2,12 +2,14 @@ package demo;
 
 import com.ulisesbocchio.jasyptspringboot.EncryptablePropertyResolver;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = CustomEncryptorDemoApplicationNoStarter.class)
 public class CustomEncryptorDemoApplicationNoStarterTest {
 
@@ -17,9 +19,6 @@ public class CustomEncryptorDemoApplicationNoStarterTest {
     @Autowired
     EncryptablePropertyResolver resolver;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
     @Test
     public void testEnvironmentProperties() {

@@ -3,10 +3,12 @@ package demo;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = SimplePBEWITHHMACSHA512ANDAES_256DemoApplication.class)
 public class SimplePBEWITHHMACSHA512ANDAES256DemoApplicationTest {
 
@@ -19,9 +21,6 @@ public class SimplePBEWITHHMACSHA512ANDAES256DemoApplicationTest {
 	@Autowired
 	StringEncryptor encryptorBean;
 
-	static {
-		System.setProperty("jasypt.encryptor.password", "password");
-	}
 
 	@Test
 	public void testEnvironmentProperties() {

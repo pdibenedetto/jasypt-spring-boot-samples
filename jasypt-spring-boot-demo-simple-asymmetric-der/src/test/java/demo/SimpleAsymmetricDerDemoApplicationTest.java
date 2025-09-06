@@ -5,12 +5,14 @@ import com.ulisesbocchio.jasyptspringboot.encryptor.SimpleAsymmetricStringEncryp
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 
 import static com.ulisesbocchio.jasyptspringboot.util.AsymmetricCryptography.KeyFormat.DER;
 
+@SetSystemProperty(key = "jasypt.encryptor.privateKeyLocation", value = "classpath:private_key.der")
 @SpringBootTest(classes = SimpleAsymmetricDerDemoApplication.class)
 public class SimpleAsymmetricDerDemoApplicationTest {
 
@@ -20,9 +22,6 @@ public class SimpleAsymmetricDerDemoApplicationTest {
     @Autowired
     MyService service;
 
-    static {
-        System.setProperty("jasypt.encryptor.privateKeyLocation", "classpath:private_key.der");
-    }
 
     @Test
     public void testEnvironmentProperties() {

@@ -4,14 +4,19 @@ import com.ulisesbocchio.jasyptspringboot.EncryptablePropertyResolver;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Objects;
 
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
+@SetSystemProperty(key = "ENCRYPTED_PASSWORD", value = "9ah+QnEdccHCkARkGZ7f0v5BLXXC+z0mr4hyjgE8T2G7mF75OBU1DgmC0YsGis8x")
 @SpringBootTest(classes = IndirectPasswordDemoApplication.class)
+//@ContextConfiguration(loader = CustomEnvironmentContextLoader.class)
 public class IndirectPasswordDemoApplicationTest {
 
     @Autowired
@@ -26,10 +31,6 @@ public class IndirectPasswordDemoApplicationTest {
     @Autowired
     StringEncryptor encryptor;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-		System.setProperty("ENCRYPTED_PASSWORD", "9ah+QnEdccHCkARkGZ7f0v5BLXXC+z0mr4hyjgE8T2G7mF75OBU1DgmC0YsGis8x");
-    }
 
     @Test
     public void testStringEncryptorIsPresent() {
