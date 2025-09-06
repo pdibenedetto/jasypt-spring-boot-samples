@@ -24,7 +24,7 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-      - name: Checkout jasypt-spring-boot on same branch
+      - name: Checkout jasypt-spring-boot on branch ${{ steps.extract_branch.outputs.branch }}
         uses: actions/checkout@v4
         with:
           repository: ulisesbocchio/jasypt-spring-boot
@@ -38,7 +38,7 @@ jobs:
         with:
           repository: ulisesbocchio/jasypt-spring-boot
           path: jasypt-spring-boot
-          ref: main
+          ref: master
           token: ${{ secrets.CHECKOUT_PAT }}
       - name: Build jasypt-spring-boot
         run: mvn -B package --file jasypt-spring-boot/pom.xml
