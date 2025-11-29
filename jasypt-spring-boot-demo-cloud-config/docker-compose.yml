@@ -7,6 +7,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: compose
       JASYPT_ENCRYPTOR_PASSWORD: password
+      FOO_BAR: ENC(Zu51R5wTUaBbhJJoj8usPJ+h3Rd4Mw8qU1NxqOtSPJM0nZaYhhdpndWp1xcEdvsr)
     ports:
      - "8080:8080"
     links:

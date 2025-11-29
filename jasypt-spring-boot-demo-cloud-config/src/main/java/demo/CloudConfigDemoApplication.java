@@ -5,6 +5,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,6 +26,9 @@ public class CloudConfigDemoApplication implements CommandLineRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(CloudConfigDemoApplication.class);
 
+    @Value("${foo.bar}")
+    private String fooBar;
+
     @Autowired
     ApplicationContext appCtx;
 
@@ -44,6 +48,8 @@ public class CloudConfigDemoApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Environment environment = appCtx.getBean(Environment.class);
         LOG.info("Environment's Indirect secret property: {}", environment.getProperty("endpoint"));
+        LOG.info("Environment's FOO_BAR from env: {}", environment.getProperty("FOO_BAR"));
+        LOG.info("Environment's FOO_BAR from @value: {}", fooBar);
         LOG.info("Done!");
     }
 }

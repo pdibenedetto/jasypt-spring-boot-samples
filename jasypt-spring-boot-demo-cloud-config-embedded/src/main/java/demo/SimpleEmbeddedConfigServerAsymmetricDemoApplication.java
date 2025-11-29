@@ -5,6 +5,7 @@ import com.ulisesbocchio.jasyptspringboot.environment.StandardEncryptableServlet
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -31,7 +32,8 @@ public class SimpleEmbeddedConfigServerAsymmetricDemoApplication implements Comm
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleEmbeddedConfigServerAsymmetricDemoApplication.class);
 
-
+    @Value("${foo.bar}")
+    private String fooBar;
 
     @Autowired
     ApplicationContext appCtx;
@@ -48,6 +50,8 @@ public class SimpleEmbeddedConfigServerAsymmetricDemoApplication implements Comm
         LOG.info("Asymmetric encryption");
         LOG.info("Environment's secret: {}", environment.getProperty("secret.property"));
         LOG.info("Environment's secret2: {}", environment.getProperty("secret2.property"));
+        LOG.info("Environment's FOO_BAR: {}", environment.getProperty("FOO_BAR"));
+        LOG.info("Environment's FOO_BAR from @value: {}", fooBar);
         LOG.info("Done!");
     }
 }

@@ -4,6 +4,7 @@ import com.ulisesbocchio.jasyptspringboot.EncryptablePropertySourceConverter;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = CloudConfigDemoApplication.class)
+@SetEnvironmentVariable(key = "FOO_BAR", value = "ENC(Zu51R5wTUaBbhJJoj8usPJ+h3Rd4Mw8qU1NxqOtSPJM0nZaYhhdpndWp1xcEdvsr)")
 @SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 public class CloudConfigDemoApplicationTest {
 
@@ -96,5 +100,11 @@ public class CloudConfigDemoApplicationTest {
         Assertions.assertEquals("theNewValueYouWantToEncrypt", environment.getProperty("testPropertyThatWillChange"));
         environment.getPropertySources().remove("refreshtest");
         Assertions.assertNull(environment.getProperty("testPropertyThatWillChange"));
+    }
+
+    @Test
+    public void testEncryptedEnvironmentVariable() {
+        assertEquals("chupacabras", environment.getProperty("FOO_BAR"));
+        assertEquals("chupacabras", environment.getProperty("foo.bar"));
     }
 }

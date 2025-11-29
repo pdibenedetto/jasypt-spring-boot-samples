@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-focal
 
 RUN groupadd -g 1000 spring && useradd -u 1000 -g spring -s /bin/sh spring
 USER spring:spring
