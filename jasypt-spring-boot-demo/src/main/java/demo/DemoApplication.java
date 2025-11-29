@@ -9,6 +9,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -44,6 +45,9 @@ public class DemoApplication implements CommandLineRunner {
     @Autowired
     ApplicationContext appCtx;
 
+    @Value("${foo.bar}")
+    String fooBar;
+
     public static void main(String[] args) {
         //try commenting the following line out and run the app from the command line passing the password as
         //a command line argument: java -jar target/jasypt-spring-boot-demo-0.0.1-SNAPSHOT.jar --jasypt.encryptor.password=password
@@ -58,7 +62,7 @@ public class DemoApplication implements CommandLineRunner {
     static public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        config.setPassword("password");
+        config.setPassword("password"); // <-- Don't do this, only for testing.
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setKeyObtentionIterations("1000");
         config.setPoolSize("1");
@@ -79,6 +83,9 @@ public class DemoApplication implements CommandLineRunner {
         Environment env = appCtx.getEnvironment();
         LOG.info("Secret from @EncryptablePropertySource annotation: {}", env.getProperty("secret2.property"));
         LOG.info("Secret from @EncryptablePropertySource annotation and YAML File: {}", env.getProperty("secret3.property"));
+        LOG.info("Secret from environment foo.bar (FOO_BAR): {}", env.getProperty("foo.bar"));
+        LOG.info("Secret from environment FOO_BAR: {}", env.getProperty("FOO_BAR"));
+        LOG.info("Secret from value foo.bar (FOO_BAR): {}", fooBar);
         SimpleBean simpleBean = appCtx.getBean(SimpleBean.class);
         LOG.info("XML Context SimpleBean value: {}", simpleBean.getValue());
         LOG.info("Done!");

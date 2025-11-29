@@ -5,6 +5,7 @@ import com.ulisesbocchio.jasyptspringboot.environment.StandardEncryptableEnviron
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -37,6 +38,9 @@ public class CustomEnvironmentSimpleDemoApplication implements CommandLineRunner
 
     @Autowired
     ApplicationContext appCtx;
+
+    @Value("${foo.bar}")
+    String fooBar;
 
     public static void main(String[] args) {
         //try commenting the following line out and run the app from the command line passing the password as
@@ -71,6 +75,8 @@ public class CustomEnvironmentSimpleDemoApplication implements CommandLineRunner
         LOG.info("Environment's Indirect secret property 3: {}", environment.getProperty("endpoint"));
         LOG.info("Environment's Indirect secret property 4: {}", environment.getProperty("endpoint2"));
         LOG.info("application yml defaultPassword2: {}", environment.getProperty("defaultPassword2"));
+        LOG.info("Secret from environment foo.bar (FOO_BAR): {}", environment.getProperty("FOO_BAR"));
+        LOG.info("Secret from value foo.bar (FOO_BAR): {}", fooBar);
         LOG.info("Done!");
     }
 }
