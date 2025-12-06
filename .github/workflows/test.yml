@@ -24,7 +24,10 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      # Try to checkout the matching branch from jasypt-spring-boot repo
+      # This will succeed for feature branches but fail for Dependabot branches that only exist in samples repo
       - name: Checkout jasypt-spring-boot on branch ${{ steps.extract_branch.outputs.branch }}
+        id: checkout_branch
         uses: actions/checkout@v4
         with:
           repository: ulisesbocchio/jasypt-spring-boot
@@ -32,8 +35,10 @@ jobs:
           ref: ${{ steps.extract_branch.outputs.branch }}
           token: ${{ secrets.CHECKOUT_PAT }}
         continue-on-error: true
+      # Fallback to master branch when the branch doesn't exist in jasypt-spring-boot
+      # Note: continue-on-error doesn't trigger if: failure(), so we check step outcome explicitly
       - name: Checkout jasypt-spring-boot on main branch (fallback)
-        if: failure()
+        if: steps.checkout_branch.outcome == 'failure'
         uses: actions/checkout@v4
         with:
           repository: ulisesbocchio/jasypt-spring-boot
