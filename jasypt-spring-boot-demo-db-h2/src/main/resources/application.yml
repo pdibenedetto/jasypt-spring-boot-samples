@@ -7,6 +7,8 @@ defaultPassword2: ENC(jHrd0zN3anZD/QTc4Fmd0DCxA6itL64tIXbGorROetPOtfJ1UoTa0+eeUY
 # works with @EnableEncryptableProperties and StandardEncryptableEnvironment
 endpoint2: https://${user2}:${defaultPassword2}@localhost:30000
 spring:
+  application:
+    name: demo-main
   jpa:
     generate-ddl: true
     show-sql: true
@@ -14,8 +16,7 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
-#    url: jdbc:h2:file:~/Downloads/test.db:testdb;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
-    url: jdbc:h2:${resources-path}/testdb;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE
+    url: jdbc:h2:${resources-path}/demo-db;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE
     driver-class-name: org.h2.Driver
     username: ULI
     password: ENC(532amohGKp+ylPJFcambS9A4iU1lKVZVRJHqlblnjqaIVVKVJxwHudMMaj/auAZO)

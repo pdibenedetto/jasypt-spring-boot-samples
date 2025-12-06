@@ -1,14 +1,19 @@
 package demo;
 
 import com.ulisesbocchio.jasyptspringboot.EncryptablePropertyResolver;
+import demo.support.BootstrapDbExtension;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.List;
 
+@ExtendWith(BootstrapDbExtension.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = DBH2DemoApplication.class)
 public class DBH2DemoApplicationTest {
 
@@ -21,9 +26,6 @@ public class DBH2DemoApplicationTest {
     @Autowired
     PersonRepository repo;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
     @Test
     public void testDbPassword() {

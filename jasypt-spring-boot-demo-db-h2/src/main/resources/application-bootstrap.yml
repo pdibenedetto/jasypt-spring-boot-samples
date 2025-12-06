@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: bootstrap
+  application:
+    name: bootstrap-db-init
+  datasource:
+    url: jdbc:h2:${resources-path}/demo-db;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+demo:
+  bootstrap: true

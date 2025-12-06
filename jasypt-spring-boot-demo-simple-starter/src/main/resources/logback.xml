@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="logback-delayed-rules.xml"/>
+    
     <logger name="org.springframework.context.annotation.ConfigurationClassEnhancer" level="ERROR"/>
     <logger name="com.ulisesbocchio.jasyptspringboot" level="ALL"/>
 
-    <springProperty name="destination" source="secret2.property"/>
+    <delayedProperty name="destination" source="secret2.property"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>

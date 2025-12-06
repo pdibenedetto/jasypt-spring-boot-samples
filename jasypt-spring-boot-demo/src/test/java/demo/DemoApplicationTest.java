@@ -1,16 +1,19 @@
 package demo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.jasypt.encryption.StringEncryptor;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = DemoApplication.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
+@SetEnvironmentVariable(key = "FOO_BAR", value = "ENC(nrmZtkF7T0kjG/VodDvBw93Ct8EgjCA+)")
 public class DemoApplicationTest {
 
 	@Autowired
@@ -29,10 +32,7 @@ public class DemoApplicationTest {
 	@Qualifier("encryptorBean")
 	StringEncryptor encryptor;
 
-	@BeforeAll
-	public static void before() {
-		System.setProperty("jasypt.encryptor.password", "password");
-	}
+
 
 	@Test
 	public void testEnvironmentProperties() {
@@ -58,9 +58,9 @@ public class DemoApplicationTest {
         assertEquals("my configuration", itemConfig.getConfigurationName());
         assertEquals(2, itemConfig.getItems().size());
         assertEquals("item1", itemConfig.getItems().get(0).getName());
-        assertEquals(new Integer(1), itemConfig.getItems().get(0).getValue());
+        assertEquals(Integer.valueOf(1), itemConfig.getItems().get(0).getValue());
         assertEquals("item2", itemConfig.getItems().get(1).getName());
-        assertEquals(new Integer(2), itemConfig.getItems().get(1).getValue());
+        assertEquals(Integer.valueOf(2), itemConfig.getItems().get(1).getValue());
     }
 
 	@Test
@@ -69,5 +69,11 @@ public class DemoApplicationTest {
 		String encrypted = encryptor.encrypt(message);
 		System.out.println("Encrypted Message: " + encrypted);
 		assertEquals(message, encryptor.decrypt(encrypted));
+	}
+
+	@Test
+	public void testEncryptedEnvironmentVariable() {
+		assertEquals("chupacabras", environment.getProperty("FOO_BAR"));
+        assertEquals("chupacabras", environment.getProperty("foo.bar"));
 	}
 }

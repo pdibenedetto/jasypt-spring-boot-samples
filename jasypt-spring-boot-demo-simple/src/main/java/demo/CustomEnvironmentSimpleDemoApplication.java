@@ -1,19 +1,20 @@
 package demo;
 
 
-import com.ulisesbocchio.jasyptspringboot.InterceptionMode;
-import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
-import com.ulisesbocchio.jasyptspringboot.annotation.EncryptablePropertySource;
 import com.ulisesbocchio.jasyptspringboot.environment.StandardEncryptableEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+
+import java.util.List;
 
 /**
  * Sample Boot application that showcases easy integration of Jasypt encryption by
@@ -38,10 +39,13 @@ public class CustomEnvironmentSimpleDemoApplication implements CommandLineRunner
     @Autowired
     ApplicationContext appCtx;
 
+    @Value("${foo.bar}")
+    String fooBar;
+
     public static void main(String[] args) {
         //try commenting the following line out and run the app from the command line passing the password as
         //a command line argument: java -jar target/jasypt-spring-boot-demo-0.0.1-SNAPSHOT.jar --jasypt.encryptor.password=password
-        //System.setProperty("jasypt.encryptor.password", "password");
+//        System.setProperty("jasypt.encryptor.password", "password");
         System.setProperty("ENCRYPTED_PASSWORD", "9ah+QnEdccHCkARkGZ7f0v5BLXXC+z0mr4hyjgE8T2G7mF75OBU1DgmC0YsGis8x");
         //Enable proxy mode for intercepting encrypted properties
         //System.setProperty("jasypt.encryptor.proxyPropertySources", "true");
@@ -49,6 +53,7 @@ public class CustomEnvironmentSimpleDemoApplication implements CommandLineRunner
                 .environment(
                         StandardEncryptableEnvironment
                             .builder()
+                            .skipPropertySourceClasses((List) List.of(RandomValuePropertySource.class))
                             .build()
                 )
                 .sources(CustomEnvironmentSimpleDemoApplication.class)
@@ -70,6 +75,8 @@ public class CustomEnvironmentSimpleDemoApplication implements CommandLineRunner
         LOG.info("Environment's Indirect secret property 3: {}", environment.getProperty("endpoint"));
         LOG.info("Environment's Indirect secret property 4: {}", environment.getProperty("endpoint2"));
         LOG.info("application yml defaultPassword2: {}", environment.getProperty("defaultPassword2"));
+        LOG.info("Secret from environment foo.bar (FOO_BAR): {}", environment.getProperty("FOO_BAR"));
+        LOG.info("Secret from value foo.bar (FOO_BAR): {}", fooBar);
         LOG.info("Done!");
     }
 }

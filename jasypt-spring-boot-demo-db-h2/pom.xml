@@ -16,7 +16,6 @@
 
     <properties>
         <start-class>demo.DBH2DemoApplication</start-class>
-        <java.version>1.8</java.version>
     </properties>
 
     <build>
@@ -54,6 +53,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit-pioneer</groupId>
+			<artifactId>junit-pioneer</artifactId>
+			<scope>test</scope>
         </dependency>
     </dependencies>
 

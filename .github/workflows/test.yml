@@ -7,35 +7,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test_zulu:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '17', '18', '19' ]
-    name: Java ${{ matrix.java }} Zulu build
+        java: [ '17', '18', '19', '21' ]
+        distribution: [ 'zulu', 'temurin' ]
+    name: Java ${{ matrix.java }} ${{ matrix.distribution }} build
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java ${{ matrix.java }} Zulu
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v4
+      - name: Set up Java ${{ matrix.java }} ${{ matrix.distribution }}
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
-
-  test_temurin:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [ '17', '18', '19' ]
-    name: Java ${{ matrix.Java }} Temurin
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java ${{ matrix.java }} Temurin
-        uses: actions/setup-java@v2
+      - name: Extract branch name
+        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      - name: Checkout jasypt-spring-boot on branch ${{ steps.extract_branch.outputs.branch }}
+        uses: actions/checkout@v4
         with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
+          repository: ulisesbocchio/jasypt-spring-boot
+          path: jasypt-spring-boot
+          ref: ${{ steps.extract_branch.outputs.branch }}
+          token: ${{ secrets.CHECKOUT_PAT }}
+        continue-on-error: true
+      - name: Checkout jasypt-spring-boot on main branch (fallback)
+        if: failure()
+        uses: actions/checkout@v4
+        with:
+          repository: ulisesbocchio/jasypt-spring-boot
+          path: jasypt-spring-boot
+          ref: master
+          token: ${{ secrets.CHECKOUT_PAT }}
+      - name: Build jasypt-spring-boot
+        run: mvn -B package --file jasypt-spring-boot/pom.xml
+      - name: Install jasypt-spring-boot artifact locally
+        run: mvn -B install -DskipTests --file jasypt-spring-boot/pom.xml
       - name: Test with Maven
-        run: mvn -B test --file pom.xml
-
+        run: mvn -B test --file pom.xml -Djasypt.spring.boot.version=$(mvn --file jasypt-spring-boot/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)

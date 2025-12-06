@@ -3,21 +3,48 @@ package demo;
 import com.ulisesbocchio.jasyptspringboot.encryptor.SimpleAsymmetricConfig;
 import com.ulisesbocchio.jasyptspringboot.encryptor.SimpleAsymmetricStringEncryptor;
 import org.jasypt.encryption.StringEncryptor;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.core.env.EnumerablePropertySource;
+
+import java.util.Arrays;
 
 import static com.ulisesbocchio.jasyptspringboot.util.AsymmetricCryptography.KeyFormat.PEM;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SimpleAsymmetricDemoApplication.class)
+@SetEnvironmentVariable(key = "JASYPT_ENCRYPTOR_PRIVATEKEYSTRING", value = "-----BEGIN PRIVATE KEY-----\n" +
+        "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtB/IYK8E52CYM\n" +
+        "ZTpyIY9U0HqMewyKnRvSo6s+9VNIn/HSh9+MoBGiADa2MaPKvetS3CD3CgwGq/+L\n" +
+        "IQ1HQYGchRrSORizOcIp7KBx+Wc1riatV/tcpcuFLC1j6QJ7d2I+T7RA98Sx8X39\n" +
+        "orqlYFQVysTw/aTawX/yajx0UlTW3rNAY+ykeQ0CBHowtTxKM9nGcxLoQbvbYx1i\n" +
+        "G9JgAqye7TYejOpviOH+BpD8To2S8zcOSojIhixEfayay0gURv0IKJN2LP86wkpA\n" +
+        "uAbL+mohUq1qLeWdTEBrIRXjlnrWs1M66w0l/6JwaFnGOqEB6haMzE4JWZULYYpr\n" +
+        "2yKyoGCRAgMBAAECggEAQxURhs1v3D0wgx27ywO3zeoFmPEbq6G9Z6yMd5wk7cMU\n" +
+        "vcpvoNVuAKCUlY4pMjDvSvCM1znN78g/CnGF9FoxJb106Iu6R8HcxOQ4T/ehS+54\n" +
+        "kDvL999PSBIYhuOPUs62B/Jer9FfMJ2veuXb9sGh19EFCWlMwILEV/dX+MDyo1qQ\n" +
+        "aNzbzyyyaXP8XDBRDsvPL6fPxL4r6YHywfcPdBfTc71/cEPksG8ts6um8uAVYbLI\n" +
+        "DYcsWopjVZY/nUwsz49xBCyRcyPnlEUJedyF8HANfVEO2zlSyRshn/F+rrjD6aKB\n" +
+        "V/yVWfTEyTSxZrBPl4I4Tv89EG5CwuuGaSagxfQpAQKBgQDXEe7FqXSaGk9xzuPa\n" +
+        "zXy8okCX5pT6545EmqTP7/JtkMSBHh/xw8GPp+JfrEJEAJJl/ISbdsOAbU+9KAXu\n" +
+        "PmkicFKbodBtBa46wprGBQ8XkR4JQoBFj1SJf7Gj9ozmDycozO2Oy8a1QXKhHUPk\n" +
+        "bPQ0+w3efwoYdfE67ZodpFNhswKBgQDN9eaYrEL7YyD7951WiK0joq0BVBLK3rwO\n" +
+        "5+4g9IEEQjhP8jSo1DP+zS495t5ruuuuPsIeodA79jI8Ty+lpYqqCGJTE6muqLMJ\n" +
+        "Diy7KlMpe0NZjXrdSh6edywSz3YMX1eAP5U31pLk0itMDTf2idGcZfrtxTLrpRff\n" +
+        "umowdJ5qqwKBgF+XZ+JRHDN2aEM0atAQr1WEZGNfqG4Qx4o0lfaaNs1+H+knw5kI\n" +
+        "ohrAyvwtK1LgUjGkWChlVCXb8CoqBODMupwFAqKL/IDImpUhc/t5uiiGZqxE85B3\n" +
+        "UWK/7+vppNyIdaZL13a1mf9sNI/p2whHaQ+3WoW/P3R5z5uaifqM1EbDAoGAN584\n" +
+        "JnUnJcLwrnuBx1PkBmKxfFFbPeSHPzNNsSK3ERJdKOINbKbaX+7DlT4bRVbWvVj/\n" +
+        "jcw/c2Ia0QTFpmOdnivjefIuehffOgvU8rsMeIBsgOvfiZGx0TP3+CCFDfRVqjIB\n" +
+        "t3HAfAFyZfiP64nuzOERslL2XINafjZW5T0pZz8CgYAJ3UbEMbKdvIuK+uTl54R1\n" +
+        "Vt6FO9T5bgtHR4luPKoBv1ttvSC6BlalgxA0Ts/AQ9tCsUK2JxisUcVgMjxBVvG0\n" +
+        "lfq/EHpL0Wmn59SHvNwtHU2qx3Ne6M0nQtneCCfR78OcnqQ7+L+3YCMqYGJHNFSa\n" +
+        "rd+dewfKoPnWw0WyGFEWCg==\n" +
+        "-----END PRIVATE KEY-----")
 public class SimpleAsymmetricDemoApplicationEnvTest {
 
     @Autowired
@@ -26,58 +53,64 @@ public class SimpleAsymmetricDemoApplicationEnvTest {
     @Autowired
     MyService service;
 
-    @ClassRule
-    public static final EnvironmentVariables environmentVariables = new EnvironmentVariables();
-
-    @BeforeClass
-    public static void setup() {
-        environmentVariables.set("JASYPT_ENCRYPTOR_PRIVATEKEYSTRING", "-----BEGIN PRIVATE KEY-----\n" +
-                "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtB/IYK8E52CYM\n" +
-                "ZTpyIY9U0HqMewyKnRvSo6s+9VNIn/HSh9+MoBGiADa2MaPKvetS3CD3CgwGq/+L\n" +
-                "IQ1HQYGchRrSORizOcIp7KBx+Wc1riatV/tcpcuFLC1j6QJ7d2I+T7RA98Sx8X39\n" +
-                "orqlYFQVysTw/aTawX/yajx0UlTW3rNAY+ykeQ0CBHowtTxKM9nGcxLoQbvbYx1i\n" +
-                "G9JgAqye7TYejOpviOH+BpD8To2S8zcOSojIhixEfayay0gURv0IKJN2LP86wkpA\n" +
-                "uAbL+mohUq1qLeWdTEBrIRXjlnrWs1M66w0l/6JwaFnGOqEB6haMzE4JWZULYYpr\n" +
-                "2yKyoGCRAgMBAAECggEAQxURhs1v3D0wgx27ywO3zeoFmPEbq6G9Z6yMd5wk7cMU\n" +
-                "vcpvoNVuAKCUlY4pMjDvSvCM1znN78g/CnGF9FoxJb106Iu6R8HcxOQ4T/ehS+54\n" +
-                "kDvL999PSBIYhuOPUs62B/Jer9FfMJ2veuXb9sGh19EFCWlMwILEV/dX+MDyo1qQ\n" +
-                "aNzbzyyyaXP8XDBRDsvPL6fPxL4r6YHywfcPdBfTc71/cEPksG8ts6um8uAVYbLI\n" +
-                "DYcsWopjVZY/nUwsz49xBCyRcyPnlEUJedyF8HANfVEO2zlSyRshn/F+rrjD6aKB\n" +
-                "V/yVWfTEyTSxZrBPl4I4Tv89EG5CwuuGaSagxfQpAQKBgQDXEe7FqXSaGk9xzuPa\n" +
-                "zXy8okCX5pT6545EmqTP7/JtkMSBHh/xw8GPp+JfrEJEAJJl/ISbdsOAbU+9KAXu\n" +
-                "PmkicFKbodBtBa46wprGBQ8XkR4JQoBFj1SJf7Gj9ozmDycozO2Oy8a1QXKhHUPk\n" +
-                "bPQ0+w3efwoYdfE67ZodpFNhswKBgQDN9eaYrEL7YyD7951WiK0joq0BVBLK3rwO\n" +
-                "5+4g9IEEQjhP8jSo1DP+zS495t5ruuuuPsIeodA79jI8Ty+lpYqqCGJTE6muqLMJ\n" +
-                "Diy7KlMpe0NZjXrdSh6edywSz3YMX1eAP5U31pLk0itMDTf2idGcZfrtxTLrpRff\n" +
-                "umowdJ5qqwKBgF+XZ+JRHDN2aEM0atAQr1WEZGNfqG4Qx4o0lfaaNs1+H+knw5kI\n" +
-                "ohrAyvwtK1LgUjGkWChlVCXb8CoqBODMupwFAqKL/IDImpUhc/t5uiiGZqxE85B3\n" +
-                "UWK/7+vppNyIdaZL13a1mf9sNI/p2whHaQ+3WoW/P3R5z5uaifqM1EbDAoGAN584\n" +
-                "JnUnJcLwrnuBx1PkBmKxfFFbPeSHPzNNsSK3ERJdKOINbKbaX+7DlT4bRVbWvVj/\n" +
-                "jcw/c2Ia0QTFpmOdnivjefIuehffOgvU8rsMeIBsgOvfiZGx0TP3+CCFDfRVqjIB\n" +
-                "t3HAfAFyZfiP64nuzOERslL2XINafjZW5T0pZz8CgYAJ3UbEMbKdvIuK+uTl54R1\n" +
-                "Vt6FO9T5bgtHR4luPKoBv1ttvSC6BlalgxA0Ts/AQ9tCsUK2JxisUcVgMjxBVvG0\n" +
-                "lfq/EHpL0Wmn59SHvNwtHU2qx3Ne6M0nQtneCCfR78OcnqQ7+L+3YCMqYGJHNFSa\n" +
-                "rd+dewfKoPnWw0WyGFEWCg==\n" +
-                "-----END PRIVATE KEY-----");
-    }
-
     @Test
     public void testEnvironmentProperties() {
-        Assert.assertEquals("chupacabras", environment.getProperty("secret.property"));
-        Assert.assertEquals("chupacabras", environment.getProperty("secret2.property"));
+        Assertions.assertEquals("chupacabras", environment.getProperty("secret.property"));
+        Assertions.assertEquals("chupacabras", environment.getProperty("secret2.property"));
     }
 
     @Test
     public void testServiceProperties() {
-        Assert.assertEquals("chupacabras", service.getSecret());
-        Assert.assertEquals("chupacabras", service.getSecret2());
+        Assertions.assertEquals("chupacabras", service.getSecret());
+        Assertions.assertEquals("chupacabras", service.getSecret2());
     }
 
     @Test
     public void encryptProperty() {
         SimpleAsymmetricConfig config = new SimpleAsymmetricConfig();
         config.setKeyFormat(PEM);
-        config.setPrivateKey(environment.getProperty("jasypt.encryptor.private-key-string"));
+
+        // Debug: Check all jasypt-related properties
+        System.out.println("=== JASYPT-related Properties ===");
+        ((ConfigurableEnvironment) environment).getPropertySources().stream()
+                .filter(ps -> ps instanceof EnumerablePropertySource)
+                .map(ps -> (EnumerablePropertySource<?>) ps)
+                .flatMap(ps -> Arrays.stream(ps.getPropertyNames()))
+                .distinct()
+                .filter(propName -> propName.toLowerCase().contains("jasypt") || propName.toLowerCase().contains("private"))
+                .sorted()
+                .forEach(propName -> {
+                    String value = environment.getProperty(propName);
+                    System.out.println(propName + " = " + (value != null ? value.substring(0, Math.min(50, value.length())) + "..." : "null"));
+                });
+        System.out.println("=== End JASYPT Properties ===\n");
+
+        // Try different property name variations in order of preference
+        // Note: Maven prefers camelCase, IDE prefers kebab-case
+        String[] possibleKeys = {
+                "jasypt.encryptor.privateKeyString",      // Works in Maven
+                "jasypt.encryptor.private-key-string",    // Works in IDE
+                "jasypt.encryptor.privatekeystring",      // Fallback
+                "JASYPT_ENCRYPTOR_PRIVATEKEYSTRING"       // Direct env var access
+        };
+
+        String privateKey = null;
+        for (String key : possibleKeys) {
+            String value = environment.getProperty(key);
+            System.out.println("Trying key '" + key + "': " + (value != null ? "FOUND" : "null"));
+            if (value != null) {
+                privateKey = value;
+                break;
+            }
+        }
+
+        if (privateKey == null) {
+            System.out.println("WARNING: Private key not found with any of the expected property names!");
+            return;
+        }
+
+        System.out.println("Private Key: " + privateKey);
+        config.setPrivateKey(privateKey);
         config.setPublicKey("-----BEGIN PUBLIC KEY-----\n" +
                 "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArQfyGCvBOdgmDGU6ciGP\n" +
                 "VNB6jHsMip0b0qOrPvVTSJ/x0offjKARogA2tjGjyr3rUtwg9woMBqv/iyENR0GB\n" +
@@ -92,7 +125,7 @@ public class SimpleAsymmetricDemoApplicationEnvTest {
         String encrypted = encryptor.encrypt(message);
         System.out.printf("Encrypted message %s\n", encrypted);
         String decrypted = encryptor.decrypt(encrypted);
-        Assert.assertEquals(message, decrypted);
+        Assertions.assertEquals(message, decrypted);
         System.out.println();
     }
 

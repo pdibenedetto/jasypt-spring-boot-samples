@@ -2,6 +2,7 @@ package demo;
 
 import com.ulisesbocchio.jasyptspringboot.environment.StandardEncryptableEnvironment;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ class EncryptableEnvironmentContextLoader extends SpringBootContextLoader {
 }
 
 @ContextConfiguration(loader = EncryptableEnvironmentContextLoader.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = CustomResolverDemoApplication.class)
 public class CustomResolverDemoApplicationTest {
 
@@ -29,9 +31,6 @@ public class CustomResolverDemoApplicationTest {
     @Autowired
     MyService service;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
     @Test
     public void testEnvironmentProperties() {

@@ -26,6 +26,7 @@ import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.TrustSelfSignedStrategy;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -48,15 +49,13 @@ class EncryptableEnvironmentContextLoader extends SpringBootContextLoader {
 }
 
 @ContextConfiguration(loader = EncryptableEnvironmentContextLoader.class)
+@SetSystemProperty(key = "jasypt.encryptor.password", value = "password")
 @SpringBootTest(classes = SampleTomcatSslApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SampleTomcatSslApplicationTest {
 
     @LocalServerPort
     int port;
 
-    static {
-        System.setProperty("jasypt.encryptor.password", "password");
-    }
 
     @Test
     public void testHome() throws Exception {
