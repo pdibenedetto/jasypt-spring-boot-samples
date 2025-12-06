@@ -43,5 +43,12 @@ echo -e "${YELLOW}Removing Container(s)${NC}"
 docker compose rm -f
 echo -e "${YELLOW}Building Image(s)${NC}"
 docker build --build-arg JAR_FILE=target/*.jar -t jasypt-spring-boot-demo-cloud-config-client .
+
+cleanup() {
+  echo -e "${YELLOW}Tearing Down Compose Environment${NC}"
+  docker compose down
+}
+trap cleanup EXIT
+
 echo -e "${YELLOW}Running App${NC}"
 docker compose run config-client
