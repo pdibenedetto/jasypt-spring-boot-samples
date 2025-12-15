@@ -17,7 +17,7 @@
         <spring.cloud.version>2025.0.0</spring.cloud.version>
         <maven.compiler.version>3.13.0</maven.compiler.version>
         <start-class>Application</start-class>
-        <jasypt.spring.boot.version>4.0.0-SNAPSHOT</jasypt.spring.boot.version>
+        <jasypt.spring.boot.version>4.0.4-SNAPSHOT</jasypt.spring.boot.version>
         <system.rules.version>1.19.0</system.rules.version>
         <junit-pioneer.version>2.3.0</junit-pioneer.version>
     </properties>
